@@ -1,0 +1,9 @@
+# Eclipse
+.settings/
+.project
+.classpath
+
+# IDE divers
+.idea/
+*.iml
+.vscode/
