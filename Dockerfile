@@ -17,7 +17,7 @@ WORKDIR /src
 RUN ./gradlew build
 
 
-FROM alpine:3.19 AS front
+FROM alpine:3.24 AS front
 
 COPY --from=front-build /src/dist/microcrm/browser /app/front
 COPY misc/docker/Caddyfile /app/Caddyfile
@@ -48,7 +48,7 @@ EXPOSE 8080
 CMD ["java", "-jar", "/app/back/microcrm-0.0.1-SNAPSHOT.jar"]
 
 
-FROM alpine:3.19 AS standalone
+FROM alpine:3.24 AS standalone
 
 COPY --from=front / /
 COPY --from=back / /
