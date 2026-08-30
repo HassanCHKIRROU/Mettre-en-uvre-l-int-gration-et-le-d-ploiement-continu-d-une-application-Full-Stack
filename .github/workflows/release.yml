@@ -1,0 +1,61 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  release:
+    name: Build artefacts et creer la release GitHub
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+        working-directory: back
+
+      - name: Build back-end JAR
+        run: ./gradlew build -x test
+        working-directory: back
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: front/package-lock.json
+
+      - name: Install front-end dependencies
+        run: npm ci
+        working-directory: front
+
+      - name: Build front-end
+        run: npx ng build --configuration production
+        working-directory: front
+
+      - name: Package front-end build
+        run: |
+          cd front/dist/microcrm/browser
+          zip -r ../../../../microcrm-front.zip .
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            back/build/libs/*.jar
+            microcrm-front.zip
+          generate_release_notes: true
+          fail_on_unmatched_files: true
