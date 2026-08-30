@@ -7,6 +7,10 @@ plugins {
 	id 'org.sonarqube' version '4.4.1.3373'
 }
 
+tasks.named('jar') {
+    enabled = false
+}
+
 group = 'com.openclassroom.devops.orion'
 version = '0.0.1-SNAPSHOT'
 
