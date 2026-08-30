@@ -14,7 +14,7 @@ COPY ./back /src
 
 WORKDIR /src
 
-RUN ./gradlew build
+RUN chmod +x gradlew && ./gradlew build
 
 
 FROM alpine:3.24 AS front
