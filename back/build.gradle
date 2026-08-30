@@ -3,6 +3,8 @@ plugins {
 	id 'org.springframework.boot' version '3.2.5'
 	id 'io.spring.dependency-management' version '1.1.4'
 	id 'com.adarshr.test-logger' version '4.0.0'
+	id 'jacoco'
+	id 'org.sonarqube' version '4.4.1.3373'
 }
 
 group = 'com.openclassroom.devops.orion'
@@ -28,4 +30,22 @@ dependencies {
 
 test {
     useJUnitPlatform()
+	finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true
+    }
+}
+
+
+sonar {
+    properties {
+        property "sonar.projectKey", "HassanCHKIRROU_Mettre-en-uvre-l-int-gration-et-le-d-ploiement-continu-d-une-application-Full-Stack"
+        property "sonar.organization", "hassanchkirrou"
+		property "sonar.host.url", "https://sonarcloud.io"
+        property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml"
+    }
 }
