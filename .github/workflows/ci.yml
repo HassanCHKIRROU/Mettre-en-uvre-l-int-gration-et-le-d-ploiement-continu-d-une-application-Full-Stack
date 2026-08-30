@@ -115,8 +115,8 @@ jobs:
           target: back
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/microcrm-back:latest
-            ghcr.io/${{ github.repository_owner }}/microcrm-back:${{ github.sha }}
+            ghcr.io/${{ steps.repo.outputs.owner }}/microcrm-back:latest
+            ghcr.io/${{ steps.repo.outputs.owner }}/microcrm-back:${{ github.sha }}
 
       - name: Build and push front-end image
         uses: docker/build-push-action@v6
@@ -125,5 +125,5 @@ jobs:
           target: front
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/microcrm-front:latest
-            ghcr.io/${{ github.repository_owner }}/microcrm-front:${{ github.sha }}
+            ghcr.io/${{ steps.repo.outputs.owner }}/microcrm-front:latest
+            ghcr.io/${{ steps.repo.outputs.owner }}/microcrm-front:${{ github.sha }}
