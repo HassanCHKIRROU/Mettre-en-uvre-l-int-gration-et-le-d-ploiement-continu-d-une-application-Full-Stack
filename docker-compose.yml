@@ -6,6 +6,9 @@ services:
     container_name: microcrm-back
     ports:
       - "8080:8080"
+    networks:
+      - default
+      - elk
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "wget", "--spider", "-q", "http://localhost:8080/persons"]
@@ -26,3 +29,8 @@ services:
       back:
         condition: service_healthy
     restart: unless-stopped
+
+networks:
+  elk:
+    name: microcrm-elk-network
+    external: true
