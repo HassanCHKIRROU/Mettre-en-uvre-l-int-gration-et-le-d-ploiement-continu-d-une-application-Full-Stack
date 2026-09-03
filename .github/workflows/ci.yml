@@ -5,6 +5,10 @@ on:
     branches: [main, dev]
   pull_request:
     branches: [main, dev]
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write
 
 jobs:
   backend:
@@ -46,6 +50,13 @@ jobs:
         run: ./gradlew sonar
         working-directory: back
 
+      - name: Publier le rapport de tests (back-end)
+        if: always()
+        uses: mikepenz/action-junit-report@v4
+        with:
+          report_paths: 'back/build/test-results/test/*.xml'
+          check_name: "Résultats des tests - Back-end"
+
   frontend:
     name: Frontend - Build, Test & Sonar
     runs-on: ubuntu-latest
@@ -80,6 +91,13 @@ jobs:
           projectBaseDir: front
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: Publier le rapport de tests (front-end)
+        if: always()
+        uses: mikepenz/action-junit-report@v4
+        with:
+          report_paths: 'test-results/front/junit.xml'
+          check_name: "Résultats des tests - Front-end"
 
   publish-images:
     name: Publier les images Docker sur GHCR
